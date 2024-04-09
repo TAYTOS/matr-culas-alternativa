@@ -54,11 +54,46 @@ const SubjectSettings : FC<Subject & SubjectButton> = function({name, group, onC
 
 const subjects : Subject[] = [
   {
-    name: "AC",
+    name: "PROGRAMACION WEB 2	",
     id : "1702122",
     group: "A",
     mat: 1,
-    credits: 5,
+    credits: 4,
+  },
+  {
+    name: "BASE DE DATOS	",
+    id : "1703133",
+    group: "A",
+    mat: 1,
+    credits: 4,
+  },
+  {
+    name: "PROGRAMACION DE SISTEMAS	",
+    id : "1703134",
+    group: "A",
+    mat: 1,
+    credits: 4,
+  },
+  {
+    name: "TEORIA DE LA COMPUTACION	",
+    id : "1703136",
+    group: "A",
+    mat: 1,
+    credits: 3,
+  },
+  {
+    name: "ORGANIZACION Y METODOS	",
+    id : "1703137",
+    group: "A",
+    mat: 1,
+    credits: 3,
+  },
+  {
+    name: "INVESTIGACION DE OPERACIONES	",
+    id : "1703138",
+    group: "A",
+    mat: 1,
+    credits: 4,
   }
 ]
 
