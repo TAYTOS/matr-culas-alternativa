@@ -1,17 +1,37 @@
 import React, { FC, useRef, useState } from 'react'
-import { Subject } from 'components/RollBackSettings'
-import RollBackSettings from 'components/RollBackSettings'
-
-function useUNSA_Student({cui, nues, code, period, maxCred}){
-  const cuiRef = useRef(null)
-  const nuesRef = useRef(null)
-  const codeRef = useRef(null)
-  const periodRef = useRef(null)
-  const maxCredRef = useRef(null)
-  const [subjects, setSubjects] = useState<Subject[]>([])
+import { Subject } from '#components/RollBackSettings.js'
+import RollBackSettings from '#components/RollBackSettings.js'
+function useUNSA_Student({cui, nues, code, period, maxCred, data}: Props){
+  const [subjects, setSubjects] = useState<Subject[]>(data)
 
   function sendRollback(){
+    
+    let credsum = 0
 
+    for(let e of data){
+      credsum += e.credits
+    }
+
+    const url = "http://extranet.unsa.edu.pe/sisacad/matint_24a_v1a/academico.php"
+    const fetchFunction = ` 
+    const res = fetch("${url}",{
+      method: "post",
+      headers: {
+        "Content-Type" : "application/x-www-form-urlencoded",
+      },
+      body: "reingreso=0&cui=${cui}&nues=${nues}&espe=0&cod0=${code}&nmat=1&periodo=2024A&creditos=${credsum}&precred=0&seleccion=${data.map((e) => 
+        `,${e.id}`
+      ).join()}&preseleccion=&hid_anho=&tasigs=${data.map((e) =>
+        `${e.id}/${e.credits}.0`
+      ).join(",")}"
+    })
+
+    res.then((data) => data.text()).then((data) => {
+      console.log("hello from console")
+      console.log(data)
+    }) 
+    `
+    console.log(fetchFunction)
   }
 
   function addToRollback(sub: Subject){
@@ -53,6 +73,7 @@ interface Props {
   code?: string,
   period?: string,
   maxCred?: string,
+  data: Subject[]
 }
 
 const cuiDefault = "20220579"
@@ -61,16 +82,18 @@ const codeDefault = "IS221029"
 const periodDefault = "2024A"
 const maxCredDefault = "29"
 
-const Form : FC<Props> = function({label, cui, nues, code, period, maxCred}){
+const Form : FC<Props> = function({label, cui, nues, code, period, maxCred, data}){
   const { 
-    swapInRollback, checkSubjects,
+    swapInRollback, checkSubjects, sendRollback,
     subjects 
   } = useUNSA_Student({
+    label,
     cui: cui || cuiDefault,
     nues: nues || nuesDefault,
     code: code || codeDefault,
     period: period || periodDefault,
     maxCred: maxCred || maxCredDefault,
+    data
   })
 
   return (
@@ -87,9 +110,10 @@ const Form : FC<Props> = function({label, cui, nues, code, period, maxCred}){
       <input type="hidden" name="listgrup" value="AAAAAA" />
       <input type="hidden" name="listmat" value="010101010101" />
       <input type="hidden" name="hid_anho" value="2" />
-      <RollBackSettings  swapSubject={swapInRollback} />
-      <input type="submit" value="enviar"  className="rounded-lg border-white border p-2 uppercase m-4 " />
+      <RollBackSettings  data={data} />
       <button type="button" onClick={checkSubjects}> Revisar Cursos </button>
+      <button type="button" onClick={sendRollback}> Rolback </button>
+
     </form>
   )
 }

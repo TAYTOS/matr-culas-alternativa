@@ -4,6 +4,7 @@ import './App.css'
 
 import Form from './Form'
 import Header from './Header'
+import { subjects, subjects_2, subjects_3, subjects_4, subjects_5, subjects_6 } from '#components/data.js'
 
 
 function App() {
@@ -12,7 +13,13 @@ function App() {
   return (
     <div>
       <Header></Header>
-      <Form label="Opcion A"></Form>
+      <Form label="Opcion A" data={subjects}></Form>
+      <Form label="Opcion B" data={subjects_2}></Form>
+      <Form label="Opcion C" data={subjects_3}></Form>
+      <Form label="Opcion D" data={subjects_4}></Form>
+      <Form label="Opcion E" data={subjects_5}></Form>
+      <Form label="Opcion F" data={subjects_6}></Form>
+
     </div>
   )
   // return (
